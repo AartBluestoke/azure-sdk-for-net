@@ -1,5 +1,14 @@
 # Release History
 
+## 4.16.0 (2023-05-09)
+
+### Features Added
+
+- Added `AcsIncomingCallEventData` event.
+- Added `DeliveryStatusDetails` property to `AcsEmailDeliveryReportReceivedEventData` event.
+- Added `HealthCareDicomImageUpdatedEventData` event.
+- Added `PartionName` property to Dicom events.
+
 ## 4.15.0 (2023-04-13)
 
 ### Features Added
