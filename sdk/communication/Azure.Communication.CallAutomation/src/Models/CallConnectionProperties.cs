@@ -27,7 +27,7 @@ namespace Azure.Communication.CallAutomation
             Targets = targets == null ? new List<CommunicationIdentifier>() : targets.ToList();
             CallConnectionState = callConnectionState == default ? CallConnectionState.Unknown : callConnectionState;
             CallbackUri = callbackUri;
-            SourceIdentity = sourceIdentity;
+            Source = sourceIdentity;
             SourceCallerIdNumber = sourceCallerIdNumber;
             SourceDisplayName = sourceDisplayName;
             MediaSubscriptionId = mediaSubscriptionId;
@@ -50,8 +50,10 @@ namespace Azure.Communication.CallAutomation
 
             CallbackUri = new Uri(callConnectionPropertiesDtoInternal.CallbackUri);
             MediaSubscriptionId = callConnectionPropertiesDtoInternal.MediaSubscriptionId;
-            SourceIdentity = CommunicationIdentifierSerializer.Deserialize(callConnectionPropertiesDtoInternal.SourceIdentity);
+            Source = callConnectionPropertiesDtoInternal.SourceIdentity == null? null : CommunicationIdentifierSerializer.Deserialize(callConnectionPropertiesDtoInternal.SourceIdentity);
             SourceDisplayName = callConnectionPropertiesDtoInternal.SourceDisplayName;
+            CorrelationId = callConnectionPropertiesDtoInternal.CorrelationId;
+            AnsweredBy = callConnectionPropertiesDtoInternal.AnsweredByIdentifier == null? null : new CommunicationUserIdentifier(callConnectionPropertiesDtoInternal.AnsweredByIdentifier.Id);
 
             if (callConnectionPropertiesDtoInternal.SourceCallerIdNumber != null)
             {
@@ -82,6 +84,16 @@ namespace Azure.Communication.CallAutomation
         /// <summary>
         /// Source identity.
         /// </summary>
-        public CommunicationIdentifier SourceIdentity { get; }
+        public CommunicationIdentifier Source { get; }
+
+        /// <summary>
+        /// The correlation ID.
+        /// </summary>
+        public string CorrelationId { get; }
+
+        /// <summary>
+        /// Identity of the answering entity. Only populated when identity is provided in the request.
+        /// </summary>
+        public CommunicationUserIdentifier AnsweredBy { get; }
     }
 }

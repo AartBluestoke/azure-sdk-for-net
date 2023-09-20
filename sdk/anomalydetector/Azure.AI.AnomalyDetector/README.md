@@ -105,7 +105,7 @@ We guarantee that all client instance methods are thread-safe and independent of
 [Long-running operations](https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/README.md#consuming-long-running-operations-using-operationt) |
 [Handling failures](https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/README.md#reporting-errors-requestfailedexception) |
 [Diagnostics](https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/Diagnostics.md) |
-[Mocking](https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/README.md#mocking) |
+[Mocking](https://learn.microsoft.com/dotnet/azure/sdk/unit-testing-mocking) |
 [Client lifetime](https://devblogs.microsoft.com/azure-sdk/lifetime-management-and-thread-safety-guarantees-of-azure-sdk-net-clients/)
 <!-- CLIENT COMMON BAR -->
 
@@ -126,12 +126,13 @@ Console.WriteLine("Detecting anomalies in the entire time series.");
 
 try
 {
-    UnivariateEntireDetectionResult result = client.DetectUnivariateEntireSeries(request);
+    Response response = client.DetectUnivariateEntireSeries(request.ToRequestContent());
+    JsonElement result = JsonDocument.Parse(response.ContentStream).RootElement;
 
     bool hasAnomaly = false;
     for (int i = 0; i < request.Series.Count; ++i)
     {
-        if (result.IsAnomaly[i])
+        if (result.GetProperty("isAnomaly")[i].GetBoolean())
         {
             Console.WriteLine($"An anomaly was detected at index: {i}.");
             hasAnomaly = true;
